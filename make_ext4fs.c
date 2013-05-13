@@ -75,10 +75,10 @@ static u32 build_directory_structure(const char *full_path, const char *dir_path
 		u32 dir_inode, int android)
 {
 	int entries = 0;
+	int ret = 0;
 	struct dentry *dentries;
 	struct dirent **namelist;
 	struct stat stat;
-	int ret;
 	int i;
 	u32 inode;
 	u32 entry_inode;
@@ -99,8 +99,11 @@ static u32 build_directory_structure(const char *full_path, const char *dir_path
 		if (dentries[i].filename == NULL)
 			critical_error_errno("strdup");
 
-		asprintf(&dentries[i].path, "%s/%s", dir_path, namelist[i]->d_name);
-		asprintf(&dentries[i].full_path, "%s/%s", full_path, namelist[i]->d_name);
+		ret += asprintf(&dentries[i].path, "%s/%s", dir_path, namelist[i]->d_name);
+		ret += asprintf(&dentries[i].full_path, "%s/%s", full_path, namelist[i]->d_name);
+		if (ret != 0) {
+			error("paths too long to fit in buffer");
+		}
 
 		free(namelist[i]);
 
@@ -141,7 +144,10 @@ static u32 build_directory_structure(const char *full_path, const char *dir_path
 		} else if (S_ISLNK(stat.st_mode)) {
 			dentries[i].file_type = EXT4_FT_SYMLINK;
 			dentries[i].link = calloc(info.block_size, 1);
-			readlink(dentries[i].full_path, dentries[i].link, info.block_size - 1);
+			ret = readlink(dentries[i].full_path, dentries[i].link, info.block_size - 1);
+			if (ret < 0) {
+				error("couldn't resolve symlink %s", dentries[i].full_path);
+			}
 		} else {
 			error("unknown file type on %s", dentries[i].path);
 			i--;
