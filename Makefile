@@ -26,7 +26,7 @@ all: make_ext4fs simg2img
 	gcc -I.   -DANDROID -c $<
 
 make_ext4fs: $(libext4_utils_src_obj)
-	gcc $^ -o $@ -lz
+	gcc $^ -o $@ -lz /lib/`uname -m`-linux-gnu/libuuid.so.1
 
 
 simg2img: $(simg2img_src_obj)

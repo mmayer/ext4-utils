@@ -119,7 +119,7 @@ int ext4_bg_has_super_block(int bg);
 void write_ext4_image(const char *filename, int gz, int sparse);
 void ext4_create_fs_aux_info(void);
 void ext4_free_fs_aux_info(void);
-void ext4_fill_in_sb(void);
+void ext4_fill_in_sb(const char *uuid);
 void ext4_create_resize_inode(void);
 void ext4_create_journal_inode(void);
 void ext4_update_free(void);

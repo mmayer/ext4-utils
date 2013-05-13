@@ -43,11 +43,12 @@ int main(int argc, char **argv)
         const char *filename = NULL;
         const char *directory = NULL;
         char *mountpoint = "";
+        char *uuid = NULL;
         int android = 0;
         int gzip = 0;
         int sparse = 0;
 
-        while ((opt = getopt(argc, argv, "l:j:b:g:i:I:L:a:fzJs")) != -1) {
+        while ((opt = getopt(argc, argv, "l:j:b:g:i:I:L:a:fzJsU:")) != -1) {
                 switch (opt) {
                 case 'l':
                         info.len = parse_num(optarg);
@@ -86,6 +87,9 @@ int main(int argc, char **argv)
                 case 's':
                         sparse = 1;
                         break;
+               case 'U':
+                       uuid = optarg;
+                       break;
                 default: /* '?' */
                         usage(argv[0]);
                         exit(EXIT_FAILURE);
@@ -115,5 +119,6 @@ int main(int argc, char **argv)
                 exit(EXIT_FAILURE);
         }
 
-        return make_ext4fs(filename, directory, mountpoint, android, gzip, sparse);
+        return make_ext4fs(filename, directory, mountpoint, android, gzip,
+                sparse, uuid);
 }

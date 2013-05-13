@@ -227,7 +227,8 @@ void reset_ext4fs_info() {
 }
 
 int make_ext4fs(const char *filename, const char *directory,
-                char *mountpoint, int android, int gzip, int sparse)
+                char *mountpoint, int android, int gzip, int sparse,
+                const char *uuid)
 {
         u32 root_inode_num;
         u16 root_mode;
@@ -294,7 +295,7 @@ int make_ext4fs(const char *filename, const char *directory,
 
 	block_allocator_init();
 
-	ext4_fill_in_sb();
+	ext4_fill_in_sb(uuid);
 
 	if (reserve_inodes(0, 10) == EXT4_ALLOCATE_FAILED)
 		error("failed to reserve first 10 inodes");
