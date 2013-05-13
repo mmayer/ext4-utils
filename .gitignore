@@ -1,0 +1,6 @@
+*~
+*.img
+*.o
+*.orig
+*.patch
+*.rej
