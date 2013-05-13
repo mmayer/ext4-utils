@@ -77,9 +77,7 @@ int ext4_bg_has_super_block(int bg)
 /* Write the filesystem image to a file */
 void write_ext4_image(const char *filename, int gz, int sparse)
 {
-	int ret = 0;
 	struct output_file *out = open_output_file(filename, gz, sparse);
-	off_t off;
 
 	if (!out)
 		return;

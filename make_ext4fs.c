@@ -25,6 +25,7 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 
+#include "backed_block.h"
 #include "make_ext4fs.h"
 #include "output_file.h"
 #include "ext4_utils.h"
@@ -116,11 +117,6 @@ static u32 build_directory_structure(const char *full_path, const char *dir_path
 		dentries[i].mtime = stat.st_mtime;
 		if (android) {
 #ifdef ANDROID
-			unsigned int mode = 0;
-			unsigned int uid = 0;
-			unsigned int gid = 0;
-			int dir = S_ISDIR(stat.st_mode);
-			//fs_config(dentries[i].path, dir, &uid, &gid, &mode);
 			dentries[i].mode = stat.st_mode;
 			dentries[i].uid = stat.st_uid;
 			dentries[i].gid = stat.st_gid;
